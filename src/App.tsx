@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-import { ConfigProvider, DatePicker, type DatePickerProps } from 'antd';
+import { ConfigProvider } from 'antd';
 // 由于 antd 组件的默认文案是英文，所以需要修改为中文
 import dayjs from 'dayjs';
 
@@ -14,9 +14,7 @@ import zhCN from 'antd/locale/zh_CN';
 dayjs.locale('zh-cn'); // 设置dayjs为中文
 
 function App() {
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
-  };
+  
   const [count, setCount] = useState(0)
 
   return (
@@ -30,7 +28,6 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <DatePicker onChange={onChange} />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
