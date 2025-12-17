@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
+    "@tanstack/react-router": "^1.141.4",
     "antd": "^6.1.1",
     "dayjs": "^1.11.19",
     "react": "^19.2.0",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@tanstack/eslint-plugin-query": "^5.91.2",
+    "@tanstack/router-plugin": "^1.141.4",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -29,6 +31,7 @@
     "globals": "^16.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-watch-and-run": "^1.7.5"
   }
 }
