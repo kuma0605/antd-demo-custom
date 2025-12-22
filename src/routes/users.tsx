@@ -2,35 +2,16 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { Card, List, Avatar, Spin, Alert } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
+import { getUsers } from '../api/users'
 
 export const Route = createFileRoute('/users')({
   component: Users,
 })
 
-// 模拟 API 数据
-interface User {
-  id: number
-  name: string
-  email: string
-  avatar?: string
-}
-
-// 模拟 API 函数
-const fetchUsers = async (): Promise<User[]> => {
-  // 模拟网络延迟
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  return [
-    { id: 1, name: '张三', email: 'zhangsan@example.com' },
-    { id: 2, name: '李四', email: 'lisi@example.com' },
-    { id: 3, name: '王五', email: 'wangwu@example.com' },
-    { id: 4, name: '赵六', email: 'zhaoliu@example.com' },
-  ]
-}
-
 function Users() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],
-    queryFn: fetchUsers,
+    queryFn: getUsers,
   })
 
   if (isLoading) {
