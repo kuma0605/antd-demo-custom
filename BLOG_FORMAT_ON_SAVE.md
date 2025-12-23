@@ -233,9 +233,9 @@ export default defineConfig([
 保存前：
 
 ```typescript
-const user = { name: 'Dylan', age: 25 }
+const user = { name: "Dylan", age: 25 }
 function greet(user) {
-  return `Hello,${user.name}`
+  return `Hello, ${user.name}`
 }
 ```
 
