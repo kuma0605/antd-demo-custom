@@ -22,4 +22,13 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  // TanStack Router 路由文件：允许导出 Route 常量
+  // 即使 Home 组件没有 export，规则也会检测到文件中有组件定义 + 非组件导出
+  // 使用 allowConstantExport 允许导出常量（如 Route），Fast Refresh 仍然正常工作
+  {
+    files: ['src/routes/**/*.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    },
+  },
 ])

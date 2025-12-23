@@ -13,7 +13,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <h1 className="text-3xl font-bold underline">Hello world, baby!</h1>
       <div style={{ marginBottom: '20px' }}>
         <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
