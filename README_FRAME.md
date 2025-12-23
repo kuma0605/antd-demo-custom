@@ -2,16 +2,19 @@
 
 ## 核心工具栈
 
-| 领域 (Domain) | 工具 (Tool) | 版本 | 核心作用 (Role) |
-| --- | --- | --- | --- |
-| **路由** | `TanStack Router` | 1.141.4 | 类型安全的路由，file-based routing，将 URL 视为状态来源 |
-| **服务端状态** | `TanStack Query` | 5.90.12 | 自动管理服务端状态、缓存、加载与错误处理 |
-| **客户端状态** | `Zustand` | 5.0.2 | 轻量级全局状态管理（用户、主题、侧边栏等） |
-| **表单管理** | `TanStack Form` | 1.27.6 | 高性能表单处理，复杂的输入验证与状态管理 |
-| **网络请求** | `Axios` | 1.7.9 | 处理 HTTP 请求、拦截器封装、Token 注入 |
-| **UI 组件** | `Ant Design` | 6.1.1 | 企业级 UI 组件库，提供丰富的组件和设计系统 |
-| **样式方案** | `Tailwind CSS` | 4.1.18 | 实用优先的 CSS 框架，快速构建现代化界面 |
-| **日期处理** | `dayjs` | 1.11.19 | 轻量级日期处理库，与 Ant Design 完美集成 |
+| 领域 (Domain)   | 工具 (Tool)             | 版本            | 核心作用 (Role)                                         |
+| --------------- | ----------------------- | --------------- | ------------------------------------------------------- |
+| **路由**        | `TanStack Router`       | 1.141.4         | 类型安全的路由，file-based routing，将 URL 视为状态来源 |
+| **服务端状态**  | `TanStack Query`        | 5.90.12         | 自动管理服务端状态、缓存、加载与错误处理                |
+| **客户端状态**  | `Zustand`               | 5.0.2           | 轻量级全局状态管理（用户、主题、侧边栏等）              |
+| **表单管理**    | `TanStack Form`         | 1.27.6          | 高性能表单处理，复杂的输入验证与状态管理                |
+| **网络请求**    | `Axios`                 | 1.7.9           | 处理 HTTP 请求、拦截器封装、Token 注入                  |
+| **UI 组件**     | `Ant Design`            | 6.1.1           | 企业级 UI 组件库，提供丰富的组件和设计系统              |
+| **样式方案**    | `Tailwind CSS`          | 4.1.18          | 实用优先的 CSS 框架，快速构建现代化界面                 |
+| **日期处理**    | `dayjs`                 | 1.11.19         | 轻量级日期处理库，与 Ant Design 完美集成                |
+| **代码格式化**  | `Prettier`              | 3.4.2           | 统一代码风格，自动格式化，与 ESLint 完美配合            |
+| **Git Hooks**   | `Husky` + `lint-staged` | 9.1.7 / 15.2.11 | 提交前自动检查代码，确保代码质量                        |
+| **Commit 规范** | `commitlint`            | 19.6.0          | 规范 commit message 格式，统一提交信息                  |
 
 ## 技术栈特点
 
@@ -29,6 +32,9 @@
    - **Zustand**：客户端状态（用户信息、主题、UI 状态）
    - **TanStack Form**：表单状态（表单验证、字段管理）
    - **Axios**：网络请求（API 调用、拦截器）
+   - **Prettier**：代码格式化（统一代码风格）
+   - **Husky + lint-staged**：代码质量保障（提交前自动检查）
+   - **commitlint**：Commit 信息规范（统一提交格式）
 
 3. **现代化技术栈**
    - React 19.2.0
@@ -46,12 +52,16 @@
 ### 🎯 完备度：⭐⭐⭐⭐⭐
 
 这个技术栈已经非常完备，涵盖了：
+
 - ✅ 路由管理
 - ✅ 状态管理（服务端 + 客户端 + 表单）
 - ✅ 网络请求
 - ✅ UI 组件
 - ✅ 样式方案
 - ✅ 类型安全
+- ✅ 代码格式化（Prettier）
+- ✅ 代码质量检查（ESLint + Git Hooks）
+- ✅ Commit 信息规范（commitlint）
 
 ### 💡 可选补充（按需）
 
@@ -60,23 +70,13 @@
 - **测试框架**：Vitest + Testing Library
   - 单元测试和组件测试
   - 与 Vite 完美集成，快速执行
-- **代码格式化**：Prettier
-  - 统一代码风格，自动格式化
-  - 与 ESLint 配合使用（eslint-config-prettier）
-  - 安装：`pnpm add -D prettier eslint-config-prettier`
-  - 配置：`.prettierrc` 和 `.prettierignore`
-- **Git Hooks**：Husky + lint-staged
-  - **Husky**：Git hooks 管理工具，在 commit/push 前自动执行脚本
-  - **lint-staged**：只对暂存区的文件运行 linter，提高效率
-  - 安装：`pnpm add -D husky lint-staged`
-  - 作用：确保提交的代码符合规范，自动格式化，防止不规范代码进入仓库
-  - 典型配置：pre-commit 时运行 lint-staged（ESLint + Prettier）
 - **国际化**：react-i18next（如果需要多语言）
-- **图表库**：Recharts / ECharts（如果需要数据可视化）
+- **图表库**：Recharts / ECharts（如果需要数据可视化，已安装 ECharts）
 
 ## 总结
 
 这是一个**生产就绪**的现代化 React 技术栈，适合：
+
 - 🚀 中大型项目开发
 - 📱 企业级应用
 - 🎨 需要丰富 UI 组件的项目
