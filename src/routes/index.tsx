@@ -13,9 +13,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
       <div style={{ marginBottom: '20px' }}>
         <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -29,11 +27,7 @@ function Home() {
         <h1>Vite + React + TanStack Router</h1>
         <div className="card">
           <Space direction="vertical" size="middle">
-            <Button
-              type="primary"
-              onClick={() => setCount((count) => count + 1)}
-              size="large"
-            >
+            <Button type="primary" onClick={() => setCount(count => count + 1)} size="large">
               count is {count}
             </Button>
             <p>
@@ -54,10 +48,7 @@ function Home() {
         </ul>
       </Card>
 
-      <p className="read-the-docs">
-        点击 Vite 和 React 的 logo 了解更多
-      </p>
+      <p className="read-the-docs">点击 Vite 和 React 的 logo 了解更多</p>
     </div>
   )
 }
-

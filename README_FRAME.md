@@ -1,12 +1,86 @@
+# 技术栈框架说明
 
+## 核心工具栈
 
-| 领域 (Domain) | 工具 (Tool) | 核心作用 (Role) |
-| --- | --- | --- |
-| **路由** | `TanStack Router` | 类型安全的路由，将 URL 视为状态来源 |
-| **异步状态** | `TanStack Query` | 自动管理服务端状态、缓存、加载与错误处理 |
-| **UI 状态** | `Zustand` | 轻量级全局状态管理（侧边栏、主题、模态框等） |
-| **网络请求** | `Axios` | 处理 HTTP 请求、拦截器封装、Token 注入 |
-| **表单管理** | `React Hook Form` | 高性能表单处理，复杂的输入验证与状态管理 |
+| 领域 (Domain) | 工具 (Tool) | 版本 | 核心作用 (Role) |
+| --- | --- | --- | --- |
+| **路由** | `TanStack Router` | 1.141.4 | 类型安全的路由，file-based routing，将 URL 视为状态来源 |
+| **服务端状态** | `TanStack Query` | 5.90.12 | 自动管理服务端状态、缓存、加载与错误处理 |
+| **客户端状态** | `Zustand` | 5.0.2 | 轻量级全局状态管理（用户、主题、侧边栏等） |
+| **表单管理** | `TanStack Form` | 1.27.6 | 高性能表单处理，复杂的输入验证与状态管理 |
+| **网络请求** | `Axios` | 1.7.9 | 处理 HTTP 请求、拦截器封装、Token 注入 |
+| **UI 组件** | `Ant Design` | 6.1.1 | 企业级 UI 组件库，提供丰富的组件和设计系统 |
+| **样式方案** | `Tailwind CSS` | 4.1.18 | 实用优先的 CSS 框架，快速构建现代化界面 |
+| **日期处理** | `dayjs` | 1.11.19 | 轻量级日期处理库，与 Ant Design 完美集成 |
 
+## 技术栈特点
 
+### ✅ 完备的全家桶
 
+这是一个**现代化、类型安全、高性能**的 React 全栈技术栈，覆盖了前端开发的各个领域：
+
+1. **TanStack 生态统一**
+   - Router、Query、Form 来自同一生态
+   - 设计理念一致，完美集成
+   - 完整的 TypeScript 类型支持
+
+2. **职责清晰，各司其职**
+   - **TanStack Query**：服务端状态（数据获取、缓存、同步）
+   - **Zustand**：客户端状态（用户信息、主题、UI 状态）
+   - **TanStack Form**：表单状态（表单验证、字段管理）
+   - **Axios**：网络请求（API 调用、拦截器）
+
+3. **现代化技术栈**
+   - React 19.2.0
+   - TypeScript 5.9.3
+   - Vite 7.2.4 (SWC)
+   - 所有库都是最新稳定版本
+
+4. **UI 方案灵活**
+   - Ant Design：企业级组件库
+   - Tailwind CSS：实用优先的样式方案
+   - 两者可以完美配合使用
+
+## 技术栈评估
+
+### 🎯 完备度：⭐⭐⭐⭐⭐
+
+这个技术栈已经非常完备，涵盖了：
+- ✅ 路由管理
+- ✅ 状态管理（服务端 + 客户端 + 表单）
+- ✅ 网络请求
+- ✅ UI 组件
+- ✅ 样式方案
+- ✅ 类型安全
+
+### 💡 可选补充（按需）
+
+如果需要进一步完善，可以考虑：
+
+- **测试框架**：Vitest + Testing Library
+  - 单元测试和组件测试
+  - 与 Vite 完美集成，快速执行
+- **代码格式化**：Prettier
+  - 统一代码风格，自动格式化
+  - 与 ESLint 配合使用（eslint-config-prettier）
+  - 安装：`pnpm add -D prettier eslint-config-prettier`
+  - 配置：`.prettierrc` 和 `.prettierignore`
+- **Git Hooks**：Husky + lint-staged
+  - **Husky**：Git hooks 管理工具，在 commit/push 前自动执行脚本
+  - **lint-staged**：只对暂存区的文件运行 linter，提高效率
+  - 安装：`pnpm add -D husky lint-staged`
+  - 作用：确保提交的代码符合规范，自动格式化，防止不规范代码进入仓库
+  - 典型配置：pre-commit 时运行 lint-staged（ESLint + Prettier）
+- **国际化**：react-i18next（如果需要多语言）
+- **图表库**：Recharts / ECharts（如果需要数据可视化）
+
+## 总结
+
+这是一个**生产就绪**的现代化 React 技术栈，适合：
+- 🚀 中大型项目开发
+- 📱 企业级应用
+- 🎨 需要丰富 UI 组件的项目
+- 🔒 需要类型安全的项目
+- ⚡ 追求高性能的项目
+
+技术栈选择合理，各工具职责清晰，可以高效开发各种类型的 React 应用。
