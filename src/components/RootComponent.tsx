@@ -95,4 +95,3 @@ export function RootComponent() {
     </QueryClientProvider>
   )
 }
-

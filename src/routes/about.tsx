@@ -19,22 +19,18 @@ function About() {
     <div>
       <Card title="关于项目" style={{ marginBottom: '20px' }}>
         <p>这是一个使用 TanStack Router 实现 file-based routing 的演示项目。</p>
-        <p>
-          TanStack Router 提供了类型安全的路由系统，与 React Query
-          完美集成，支持自动代码分割。
-        </p>
+        <p>TanStack Router 提供了类型安全的路由系统，与 React Query 完美集成，支持自动代码分割。</p>
       </Card>
 
       <Card title="技术栈">
         <List
           dataSource={techStack}
-          renderItem={(item) => (
+          renderItem={item => (
             <List.Item>
               <List.Item.Meta
                 title={
                   <span>
-                    {item.name}{' '}
-                    <Tag color={item.color}>{item.version}</Tag>
+                    {item.name} <Tag color={item.color}>{item.version}</Tag>
                   </span>
                 }
               />
@@ -50,19 +46,16 @@ function About() {
             目录下创建文件即可自动生成路由
           </li>
           <li>
-            <strong>类型安全：</strong>路由参数和查询参数都有完整的 TypeScript
-            类型支持
+            <strong>类型安全：</strong>路由参数和查询参数都有完整的 TypeScript 类型支持
           </li>
           <li>
             <strong>代码分割：</strong>每个路由自动进行代码分割，优化加载性能
           </li>
           <li>
-            <strong>数据预加载：</strong>可以在路由级别预加载数据，与 React Query
-            完美配合
+            <strong>数据预加载：</strong>可以在路由级别预加载数据，与 React Query 完美配合
           </li>
         </ul>
       </Card>
     </div>
   )
 }
-
