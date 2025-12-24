@@ -30,4 +30,6 @@ Thumbs.db
 
 BLOG_FORMAT_ON_SAVE.md
 
+# TinyMCE static files
+public/tinymce
 
