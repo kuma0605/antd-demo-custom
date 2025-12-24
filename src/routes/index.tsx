@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Card, Button, Space } from 'antd'
 import reactLogo from '../assets/react.svg'
 import viteLogo from '/vite.svg'
+import MyEditor from '../components/tinymce'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -14,6 +15,7 @@ function Home() {
   return (
     <div style={{ textAlign: 'center' }}>
       <h1 className="text-3xl font-bold underline">Hello world, baby!</h1>
+      <MyEditor />
       <div style={{ marginBottom: '20px' }}>
         <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
