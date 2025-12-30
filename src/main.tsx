@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import './index.css'
+import './lib/screenAdaptive' // 屏幕适配
 
 // 导入路由树（会自动生成）
 import { routeTree } from './routeTree.gen'

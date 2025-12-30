@@ -1,8 +1,10 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios'
 
 // 创建 axios 实例
+// 开发环境：使用 Vite proxy，baseURL 为空或使用相对路径
+// 生产环境：使用环境变量 VITE_API_URL_PREFIX
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api.example.com',
+  baseURL: import.meta.env.VITE_API_URL_PREFIX,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -28,7 +30,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     // 统一处理响应数据
-    return response.data
+    return response
   },
   (error: AxiosError) => {
     // 统一处理错误
@@ -49,7 +51,11 @@ apiClient.interceptors.response.use(
           console.error('服务器错误')
           break
         default:
-          console.error('请求失败:', error.response.data?.message || error.message)
+          console.error(
+            '请求失败:',
+            (error.response.data as { message?: string })?.message || error.message
+          )
+          break
       }
     } else if (error.request) {
       // 请求已发出，但没有收到响应

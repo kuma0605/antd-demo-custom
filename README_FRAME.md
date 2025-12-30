@@ -2,20 +2,20 @@
 
 ## 核心工具栈
 
-| 领域 (Domain)    | 工具 (Tool)             | 版本            | 核心作用 (Role)                                         |
-| ---------------- | ----------------------- | --------------- | ------------------------------------------------------- |
-| **路由**         | `TanStack Router`       | 1.141.4         | 类型安全的路由，file-based routing，将 URL 视为状态来源 |
-| **服务端状态**   | `TanStack Query`        | 5.90.12         | 自动管理服务端状态、缓存、加载与错误处理                |
-| **客户端状态**   | `Zustand`               | 5.0.2           | 轻量级全局状态管理（用户、主题、侧边栏等）              |
-| **表单管理**     | `TanStack Form`         | 1.27.6          | 高性能表单处理，复杂的输入验证与状态管理                |
-| **网络请求**     | `Axios`                 | 1.7.9           | 处理 HTTP 请求、拦截器封装、Token 注入                  |
-| **UI 组件**      | `Ant Design`            | 6.1.1           | 企业级 UI 组件库，提供丰富的组件和设计系统              |
-| **样式方案**     | `Tailwind CSS`          | 4.1.18          | 实用优先的 CSS 框架，快速构建现代化界面                 |
-| **日期处理**     | `dayjs`                 | 1.11.19         | 轻量级日期处理库，与 Ant Design 完美集成                |
-| **富文本编辑器** | `TinyMCE`               | 8.3.1           | 功能强大的富文本编辑器，支持拖拽上传、本地化配置        |
-| **代码格式化**   | `Prettier`              | 3.4.2           | 统一代码风格，自动格式化，与 ESLint 完美配合            |
-| **Git Hooks**    | `Husky` + `lint-staged` | 9.1.7 / 15.2.11 | 提交前自动检查代码，确保代码质量                        |
-| **Commit 规范**  | `commitlint`            | 19.6.0          | 规范 commit message 格式，统一提交信息                  |
+| 领域 (Domain)    | 工具 (Tool)                                                                                           | 版本            | 核心作用 (Role)                                         | 官网                                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **路由**         | [`TanStack Router`](https://tanstack.com/router)                                                      | 1.141.4         | 类型安全的路由，file-based routing，将 URL 视为状态来源 | [tanstack.com/router](https://tanstack.com/router)                                                |
+| **服务端状态**   | [`TanStack Query`](https://tanstack.com/query)                                                        | 5.90.12         | 自动管理服务端状态、缓存、加载与错误处理                | [tanstack.com/query](https://tanstack.com/query)                                                  |
+| **客户端状态**   | [`Zustand`](https://zustand-demo.pmnd.rs/)                                                            | 5.0.2           | 轻量级全局状态管理（用户、主题、侧边栏等）              | [zustand-demo.pmnd.rs](https://zustand-demo.pmnd.rs/)                                             |
+| **表单管理**     | [`TanStack Form`](https://tanstack.com/form)                                                          | 1.27.6          | 高性能表单处理，复杂的输入验证与状态管理                | [tanstack.com/form](https://tanstack.com/form)                                                    |
+| **网络请求**     | [`Axios`](https://axios-http.com/)                                                                    | 1.7.9           | 处理 HTTP 请求、拦截器封装、Token 注入                  | [axios-http.com](https://axios-http.com/)                                                         |
+| **UI 组件**      | [`Ant Design`](https://ant.design/)                                                                   | 6.1.1           | 企业级 UI 组件库，提供丰富的组件和设计系统              | [ant.design](https://ant.design/)                                                                 |
+| **样式方案**     | [`Tailwind CSS`](https://tailwindcss.com/)                                                            | 4.1.18          | 实用优先的 CSS 框架，快速构建现代化界面                 | [tailwindcss.com](https://tailwindcss.com/)                                                       |
+| **日期处理**     | [`dayjs`](https://day.js.org/)                                                                        | 1.11.19         | 轻量级日期处理库，与 Ant Design 完美集成                | [day.js.org](https://day.js.org/)                                                                 |
+| **富文本编辑器** | [`TinyMCE`](https://www.tiny.cloud/)                                                                  | 8.3.1           | 功能强大的富文本编辑器，支持拖拽上传、本地化配置        | [tiny.cloud](https://www.tiny.cloud/)                                                             |
+| **代码格式化**   | [`Prettier`](https://prettier.io/)                                                                    | 3.4.2           | 统一代码风格，自动格式化，与 ESLint 完美配合            | [prettier.io](https://prettier.io/)                                                               |
+| **Git Hooks**    | [`Husky`](https://typicode.github.io/husky/) + [`lint-staged`](https://github.com/okonet/lint-staged) | 9.1.7 / 15.2.11 | 提交前自动检查代码，确保代码质量                        | [husky](https://typicode.github.io/husky/) / [lint-staged](https://github.com/okonet/lint-staged) |
+| **Commit 规范**  | [`commitlint`](https://commitlint.js.org/)                                                            | 19.6.0          | 规范 commit message 格式，统一提交信息                  | [commitlint.js.org](https://commitlint.js.org/)                                                   |
 
 ## 技术栈特点
 
