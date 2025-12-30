@@ -34,6 +34,7 @@ function Login() {
       if (result.data.code === 200) {
         form.setFieldValue('token', result.data.data.token)
         setCaptchaImg(result.data.data.base64)
+        setMsg(null)
       } else {
         setMsg(result.data.message)
       }
@@ -58,6 +59,7 @@ function Login() {
               <Alert
                 title={msg}
                 type="error"
+                className="mb-4"
                 closable={{ closeIcon: true, 'aria-label': 'close' }}
               />
             )}
