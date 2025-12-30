@@ -76,8 +76,12 @@ function Login() {
                   prefix={<CodeOutlined />}
                   suffix={
                     captchaImg ? (
-                      <div className="flex items-center gap-2">
-                        <img src={captchaImg} alt="验证码" className="w-[54px] h-[27px]" />
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={captchaImg}
+                          alt="验证码"
+                          className="w-[54px] h-[27px] scale-125 origin-center"
+                        />
                         <ReloadOutlined onClick={getCaptcha} className="cursor-pointer" />
                       </div>
                     ) : (
