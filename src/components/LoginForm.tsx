@@ -63,7 +63,21 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
       if (res.data.code === 200) {
         // 1.存储用户信息
         useUserStore.getState().login(res.data.data.user, res.data.data.token)
-        // 2.跳转到首页
+
+        // 2.登录成功后再保存"记住密码"（安全：只在登录成功时保存）
+        if (rememberMe) {
+          localStorage.setItem('username', values.username)
+          // 注意：密码明文存储有安全风险，生产环境建议加密或使用 token
+          localStorage.setItem('password', values.password)
+          localStorage.setItem('rememberMe', 'true')
+        } else {
+          // 取消记住密码时，清除已保存的信息
+          localStorage.removeItem('username')
+          localStorage.removeItem('password')
+          localStorage.removeItem('rememberMe')
+        }
+
+        // 3.跳转到首页
         navigate({ to: '/' })
       } else {
         openNotificationWithIcon('error', '提示', res.data.message)
@@ -81,20 +95,7 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
   }>['onFinish'] = values => {
     // 现在 values 包含所有字段，包括隐藏的 token
     console.log('Success:', values)
-    try {
-      if (rememberMe) {
-        localStorage.setItem('username', values.username)
-        localStorage.setItem('password', values.password)
-        localStorage.setItem('rememberMe', rememberMe.toString())
-      } else {
-        localStorage.removeItem('username')
-        localStorage.removeItem('password')
-        localStorage.removeItem('rememberMe')
-      }
-      doLogin(values)
-    } catch (e) {
-      openNotificationWithIcon('error', '提示', (e as Error).message)
-    }
+    doLogin(values)
   }
 
   const getCaptcha = async () => {
