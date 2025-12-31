@@ -34,18 +34,22 @@ export const useUserStore = create<UserState>()(
         set({
           token,
         }),
-      login: (user, token) =>
+      login: (user, token) => {
+        localStorage.setItem('token', token)
         set({
           user,
           token,
           isAuthenticated: true,
-        }),
-      logout: () =>
+        })
+      },
+      logout: () => {
+        localStorage.removeItem('token')
         set({
           user: null,
           token: null,
           isAuthenticated: false,
-        }),
+        })
+      },
     }),
     {
       name: 'user-storage', // localStorage 的 key

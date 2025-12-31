@@ -1,46 +1,20 @@
 import { createFileRoute } from '@tanstack/react-router'
 import logoTitle from '@/assets/img/logo_title.png'
 import iconManage from '@/assets/icon/icon_manage.png'
-import { Alert, Divider, Form, Input, Button, type FormProps, Checkbox } from 'antd'
+import { LoginForm } from '@/components/LoginForm'
 import { useState } from 'react'
-import { CodeOutlined, LockOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons'
-import apiClient from '../lib/axios'
+import { ForgetPasswordForm } from '@/components/ForgetPasswordForm'
 
 export const Route = createFileRoute('/login')({
   component: Login,
 })
 
 function Login() {
-  const [msg, setMsg] = useState<string | null>(null)
-  const [captchaImg, setCaptchaImg] = useState<string | null>(null)
-  const [rememberMe, setRememberMe] = useState(false)
-  const [form] = Form.useForm()
+  const [panelMode, setPanelMode] = useState('login')
 
-  const onFinish: FormProps<{
-    username: string
-    password: string
-    code: string
-  }>['onFinish'] = values => {
-    console.log('Success:', values)
-  }
-
-  const getCaptcha = async () => {
-    try {
-      const options = {
-        method: 'POST',
-        url: '/component/captcha',
-      }
-      const result = await apiClient.request(options)
-      if (result.data.code === 200) {
-        form.setFieldValue('token', result.data.data.token)
-        setCaptchaImg(result.data.data.base64)
-        setMsg(null)
-      } else {
-        setMsg(result.data.message)
-      }
-    } catch (e) {
-      setMsg((e as Error).message)
-    }
+  const togglePanel = (mode: string) => {
+    // 先切换面板模式
+    setPanelMode(mode)
   }
 
   return (
@@ -52,63 +26,11 @@ function Login() {
       <div className="flex justify-end w-full h-full">
         <div className="flex-1"></div>
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-[498px] h-[598px] bg-[url(@/assets/img/bg_loginBox.png)] bg-no-repeat bg-size-[100%_100%] px-[35px] flex flex-col justify-center">
-            <div className="text-[24px] text-[#111111] font-bold">登录平台</div>
-            <Divider size="small" />
-            {msg && (
-              <Alert
-                title={msg}
-                type="error"
-                className="mb-4"
-                closable={{ closeIcon: true, 'aria-label': 'close' }}
-              />
-            )}
-            <Form layout="vertical" form={form} onFinish={onFinish} autoComplete="off">
-              <Form.Item label="账号" name="username" rules={[{ required: true }]}>
-                <Input placeholder="请输入账号" prefix={<UserOutlined />} />
-              </Form.Item>
-              <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-                <Input.Password placeholder="请输入密码" prefix={<LockOutlined />} />
-              </Form.Item>
-              <Form.Item label="验证码" name="code" rules={[{ required: true }]}>
-                <Input
-                  placeholder="请输入验证码"
-                  prefix={<CodeOutlined />}
-                  suffix={
-                    captchaImg ? (
-                      <div className="flex items-center gap-4">
-                        <img
-                          src={captchaImg}
-                          alt="验证码"
-                          className="w-[54px] h-[27px] scale-125 origin-center"
-                        />
-                        <ReloadOutlined onClick={getCaptcha} className="cursor-pointer" />
-                      </div>
-                    ) : (
-                      <Button color="green" variant="solid" size="small" onClick={getCaptcha}>
-                        获取验证码
-                      </Button>
-                    )
-                  }
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" block htmlType="submit">
-                  登录
-                </Button>
-              </Form.Item>
-              <Form.Item>
-                <div className="flex items-center justify-between">
-                  <Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)}>
-                    记住密码
-                  </Checkbox>
-                  <Button color="primary" variant="filled">
-                    忘记密码
-                  </Button>
-                </div>
-              </Form.Item>
-            </Form>
-          </div>
+          {panelMode === 'login' ? (
+            <LoginForm togglePanel={togglePanel} />
+          ) : (
+            <ForgetPasswordForm togglePanel={togglePanel} />
+          )}
         </div>
       </div>
       <div className="w-full flex justify-center fixed! bottom-[60px]">

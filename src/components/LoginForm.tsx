@@ -1,199 +1,193 @@
-import { useState } from 'react'
-import { Eye, EyeOff, Lock, Mail, User, ChevronRight, Database, Shield } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Divider, Alert, Form, Input, Button, type FormProps, Checkbox, notification } from 'antd'
+import { CodeOutlined, LockOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons'
+import apiClient from '@/lib/axios'
+import { useUserStore } from '@/stores/useUserStore'
+import { useNavigate } from '@tanstack/react-router'
 
-const LoginForm = () => {
-  const [isLogin, setIsLogin] = useState(true)
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void }) => {
+  const [msg, setMsg] = useState<string | null>(null)
+  const [captchaImg, setCaptchaImg] = useState<string | null>(null)
+  // 使用初始化函数，避免在 useEffect 中调用 setState
+  const [rememberMe, setRememberMe] = useState(() => {
+    try {
+      const rememberMeStr = localStorage.getItem('rememberMe')
+      return rememberMeStr === 'true'
+    } catch {
+      return false
+    }
+  })
+  const [form] = Form.useForm()
+  const navigate = useNavigate()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsLoading(false)
+  const [api, contextHolder] = notification.useNotification()
+
+  type NotificationType = 'success' | 'info' | 'warning' | 'error'
+
+  const openNotificationWithIcon = (type: NotificationType, title: string, description: string) => {
+    api[type]({
+      title,
+      description,
+    })
+  }
+
+  // 使用 useMemo 计算表单初始值（只在组件挂载时计算一次）
+  const initialValues = useMemo(() => {
+    const isRememberMe = localStorage.getItem('rememberMe') === 'true'
+    if (isRememberMe) {
+      return {
+        username: localStorage.getItem('username') || undefined,
+        password: localStorage.getItem('password') || undefined,
+      }
+    }
+    return {}
+  }, []) // 空依赖数组，只在组件挂载时计算一次
+
+  const doLogin = async (values: {
+    username: string
+    password: string
+    code: string
+    token?: string
+  }) => {
+    try {
+      // 清空token
+      localStorage.removeItem('token')
+
+      const options = {
+        method: 'POST',
+        url: '/login/code',
+        data: values,
+      }
+      const res = await apiClient.request(options)
+
+      if (res.data.code === 200) {
+        // 1.存储用户信息
+        useUserStore.getState().login(res.data.data.user, res.data.data.token)
+        // 2.跳转到首页
+        navigate({ to: '/' })
+      } else {
+        openNotificationWithIcon('error', '提示', res.data.message)
+      }
+    } catch (e) {
+      openNotificationWithIcon('error', '提示', (e as Error).message)
+    }
+  }
+
+  const onFinish: FormProps<{
+    username: string
+    password: string
+    code: string
+    token?: string
+  }>['onFinish'] = values => {
+    // 现在 values 包含所有字段，包括隐藏的 token
+    console.log('Success:', values)
+    try {
+      if (rememberMe) {
+        localStorage.setItem('username', values.username)
+        localStorage.setItem('password', values.password)
+        localStorage.setItem('rememberMe', rememberMe.toString())
+      } else {
+        localStorage.removeItem('username')
+        localStorage.removeItem('password')
+        localStorage.removeItem('rememberMe')
+      }
+      doLogin(values)
+    } catch (e) {
+      openNotificationWithIcon('error', '提示', (e as Error).message)
+    }
+  }
+
+  const getCaptcha = async () => {
+    try {
+      const options = {
+        method: 'POST',
+        url: '/component/captcha',
+      }
+      const result = await apiClient.request(options)
+      if (result.data.code === 200) {
+        form.setFieldValue('token', result.data.data.token)
+        setCaptchaImg(result.data.data.base64)
+        setMsg(null)
+      } else {
+        setMsg(result.data.message)
+      }
+    } catch (e) {
+      setMsg((e as Error).message)
+    }
   }
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
-      {/* Outer glow container */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-neon-cyan via-neon-magenta to-neon-cyan rounded-lg opacity-75 blur-sm animate-border-flow" />
-
-      {/* Main card */}
-      <div className="relative bg-card/90 backdrop-blur-xl border border-border rounded-lg p-8 overflow-hidden">
-        {/* Corner decorations */}
-        <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary" />
-        <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-primary" />
-        <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-primary" />
-        <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-primary" />
-
-        {/* Scanline overlay */}
-        <div className="absolute inset-0 scanlines opacity-20" />
-
-        {/* Header */}
-        <div className="text-center mb-8 relative z-10">
-          <div className="inline-block mb-4">
-            <div className="w-16 h-16 mx-auto border-2 border-primary rounded-lg flex items-center justify-center box-glow-cyan animate-pulse-glow">
-              <Database className="w-8 h-8 text-primary" />
-            </div>
+    <>
+      {contextHolder}
+      <div className="w-[498px] h-[598px] bg-[url(@/assets/img/bg_loginBox.png)] bg-no-repeat bg-size-[100%_100%] px-[35px] flex flex-col justify-center">
+        <div className="text-[24px] text-[#111111] font-bold">登录平台</div>
+        <Divider size="small" />
+        {msg && (
+          <div className="mb-2">
+            <Alert title={msg} type="error" closable={{ closeIcon: true, 'aria-label': 'close' }} />
           </div>
-          <h1 className="text-2xl font-bold text-foreground text-glow tracking-widest uppercase">
-            {isLogin ? 'Data Access' : 'New Operator'}
-          </h1>
-          <p className="text-muted-foreground text-sm mt-2 tracking-wide">
-            {isLogin ? 'Authenticate to access datasets' : 'Register for data access'}
-          </p>
-        </div>
-
-        {/* Data access level indicator */}
-        <div className="mb-6 p-3 bg-muted/30 border border-border/50 rounded relative z-10">
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
-              <span className="text-muted-foreground tracking-wide">ACCESS LEVEL</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <div className="w-2 h-2 rounded-full bg-primary/60" />
-              <div className="w-2 h-2 rounded-full bg-primary/30" />
-              <span className="ml-2 text-primary tracking-wider">ADMIN</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-          {!isLogin && (
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 to-neon-magenta/20 rounded opacity-0 group-focus-within:opacity-100 blur-sm transition-opacity" />
-              <div className="relative flex items-center">
-                <User className="absolute left-3 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="OPERATOR ID"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  className="w-full bg-input/50 border border-border rounded pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all tracking-wider text-sm"
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 to-neon-magenta/20 rounded opacity-0 group-focus-within:opacity-100 blur-sm transition-opacity" />
-            <div className="relative flex items-center">
-              <Mail className="absolute left-3 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              <input
-                type="email"
-                placeholder="EMAIL ADDRESS"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full bg-input/50 border border-border rounded pl-11 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all tracking-wider text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/20 to-neon-magenta/20 rounded opacity-0 group-focus-within:opacity-100 blur-sm transition-opacity" />
-            <div className="relative flex items-center">
-              <Lock className="absolute left-3 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="ACCESS KEY"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full bg-input/50 border border-border rounded pl-11 pr-11 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all tracking-wider text-sm"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-muted-foreground hover:text-primary transition-colors"
+        )}
+        <Form
+          layout="vertical"
+          form={form}
+          initialValues={initialValues}
+          onFinish={onFinish}
+          autoComplete="off"
+          requiredMark={false}
+        >
+          <Form.Item label="账号" name="username" rules={[{ required: true }]}>
+            <Input placeholder="请输入账号" prefix={<UserOutlined />} />
+          </Form.Item>
+          <Form.Item label="密码" name="password" rules={[{ required: true }]}>
+            <Input.Password placeholder="请输入密码" prefix={<LockOutlined />} />
+          </Form.Item>
+          <Form.Item label="验证码" name="code" rules={[{ required: true }]}>
+            <Input
+              placeholder="请输入验证码"
+              prefix={<CodeOutlined />}
+              suffix={
+                captchaImg ? (
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={captchaImg}
+                      alt="验证码"
+                      className="w-[54px] h-[27px] scale-125 origin-center"
+                    />
+                    <ReloadOutlined onClick={getCaptcha} className="cursor-pointer" />
+                  </div>
+                ) : (
+                  <Button color="green" variant="solid" size="small" onClick={getCaptcha}>
+                    获取验证码
+                  </Button>
+                )
+              }
+            />
+          </Form.Item>
+          {/* 隐藏字段：存储验证码 token */}
+          <Form.Item name="token" hidden>
+            <Input type="hidden" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" block htmlType="submit">
+              登录
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <div className="flex items-center justify-between">
+              <Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)}>
+                记住密码
+              </Checkbox>
+              <Button
+                color="primary"
+                variant="filled"
+                onClick={() => togglePanel('forgetPassword')}
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+                忘记密码
+              </Button>
             </div>
-          </div>
-
-          {isLogin && (
-            <div className="flex justify-end">
-              <button
-                type="button"
-                className="text-xs text-muted-foreground hover:text-primary transition-colors tracking-wide"
-              >
-                RESET ACCESS KEY?
-              </button>
-            </div>
-          )}
-
-          {/* Submit button */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="relative w-full group overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan to-neon-magenta opacity-80 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan to-neon-magenta blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-            <div className="relative bg-card/50 m-[1px] py-3 flex items-center justify-center gap-2 group-hover:bg-transparent transition-colors">
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  <span className="text-foreground tracking-widest text-sm font-bold">
-                    CONNECTING...
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <span className="text-foreground group-hover:text-primary-foreground tracking-widest text-sm font-bold transition-colors">
-                    {isLogin ? 'ACCESS DATABASE' : 'CREATE OPERATOR'}
-                  </span>
-                  <ChevronRight className="w-5 h-5 text-foreground group-hover:text-primary-foreground group-hover:translate-x-1 transition-all" />
-                </>
-              )}
-            </div>
-          </button>
-        </form>
-
-        {/* Toggle */}
-        <div className="mt-6 text-center relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-            <span className="text-muted-foreground text-xs tracking-widest">OR</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-          </div>
-          <button
-            type="button"
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-sm text-muted-foreground hover:text-primary transition-colors tracking-wide"
-          >
-            {isLogin ? 'New operator? ' : 'Existing operator? '}
-            <span className="text-primary underline underline-offset-4">
-              {isLogin ? 'REQUEST ACCESS' : 'SIGN IN'}
-            </span>
-          </button>
-        </div>
-
-        {/* Status bar */}
-        <div className="mt-6 pt-4 border-t border-border/50 relative z-10">
-          <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground tracking-wider">
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span>ENCRYPTED</span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span>3 NODES</span>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-              <span>SYNCED</span>
-            </div>
-          </div>
-        </div>
+          </Form.Item>
+        </Form>
       </div>
-    </div>
+    </>
   )
 }
-
-export default LoginForm
