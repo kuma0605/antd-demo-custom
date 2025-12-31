@@ -1,4 +1,17 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios'
+import { useLoadingStore } from '../stores/useLoadingStore'
+
+// 请求白名单：这些接口不需要显示全局 loading
+const loadingWhitelist: string[] = [
+  '/component/captcha', // 验证码接口
+  '/component/mobile/captcha', // 手机验证码接口
+  // 可以继续添加其他不需要 loading 的接口
+]
+
+// 判断请求是否需要 loading
+const shouldShowLoading = (url: string): boolean => {
+  return !loadingWhitelist.some(path => url.includes(path))
+}
 
 // 创建 axios 实例
 // 开发环境：使用 Vite proxy，baseURL 为空或使用相对路径
@@ -19,9 +32,24 @@ apiClient.interceptors.request.use(
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    // 管理全局 loading
+    const url = config.url || ''
+    if (shouldShowLoading(url)) {
+      useLoadingStore.getState().increment()
+    }
+
     return config
   },
   (error: AxiosError) => {
+    // 请求错误时也要减少 loading 计数
+    const config = error.config as InternalAxiosRequestConfig | undefined
+    if (config) {
+      const url = config.url || ''
+      if (shouldShowLoading(url)) {
+        useLoadingStore.getState().decrement()
+      }
+    }
     return Promise.reject(error)
   }
 )
@@ -30,10 +58,25 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     // 统一处理响应数据
+    // 减少 loading 计数
+    const config = response.config
+    const url = config.url || ''
+    if (shouldShowLoading(url)) {
+      useLoadingStore.getState().decrement()
+    }
     return response
   },
   (error: AxiosError) => {
     // 统一处理错误
+    // 减少 loading 计数
+    const config = error.config as InternalAxiosRequestConfig | undefined
+    if (config) {
+      const url = config.url || ''
+      if (shouldShowLoading(url)) {
+        useLoadingStore.getState().decrement()
+      }
+    }
+
     if (error.response) {
       // 服务器返回了错误状态码
       switch (error.response.status) {
