@@ -28,10 +28,10 @@ function RootComponent() {
         <div className="w-screen h-screen">
           {/* 页面内容 */}
           <Outlet />
-
+          {/* 遮罩 */}
+          <Spin spinning={isLoading} size="large" tip="加载中..." fullscreen></Spin>
           {/* 开发工具 */}
           <TanStackRouterDevtools />
-          <Spin spinning={isLoading} size="large" tip="加载中..." fullscreen></Spin>
         </div>
       </ConfigProvider>
     </QueryClientProvider>
