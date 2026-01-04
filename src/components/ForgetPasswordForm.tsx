@@ -66,12 +66,43 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
     })
   }
 
-  const onFinish: FormProps<{
-    username: string
-    password: string
+  const doResetPassword = async (values: {
+    mobile: string
     code: string
+    newPwd: string
+    token?: string
+  }) => {
+    try {
+      const options = {
+        method: 'POST',
+        url: '/component/forgetPwd/reset',
+        data: values,
+      }
+      const res = await apiClient.request(options)
+
+      if (res.data.code === 200) {
+        //修改成功
+        openNotificationWithIcon('success', '提示', '修改成功')
+        // 立即切换回登录面板
+        setTimeout(() => {
+          togglePanel('login')
+        }, 500)
+      } else {
+        openNotificationWithIcon('error', '提示', res.data.message)
+      }
+    } catch (e) {
+      openNotificationWithIcon('error', '提示', (e as Error).message)
+    }
+  }
+
+  const onFinish: FormProps<{
+    mobile: string
+    code: string
+    newPwd: string
+    token?: string
   }>['onFinish'] = values => {
     console.log('Success:', values)
+    doResetPassword(values)
   }
 
   const getMessageCode = async () => {
