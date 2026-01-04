@@ -107,7 +107,6 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
       if (result.data.code === 200) {
         form.setFieldValue('token', result.data.data.token)
         setCaptchaImg(result.data.data.base64)
-        openNotificationWithIcon('success', '提示', '验证码获取成功')
       } else {
         openNotificationWithIcon('error', '提示', result.data.message)
       }
