@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
-import { Divider, Alert, Form, Input, Button, type FormProps, Checkbox, notification } from 'antd'
+import { Divider, Form, Input, Button, type FormProps, Checkbox, notification } from 'antd'
 import { CodeOutlined, LockOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons'
 import apiClient from '@/lib/axios'
 import { useUserStore } from '@/stores/useUserStore'
 import { useNavigate } from '@tanstack/react-router'
 
 export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void }) => {
-  const [msg, setMsg] = useState<string | null>(null)
   const [captchaImg, setCaptchaImg] = useState<string | null>(null)
   // 使用初始化函数，避免在 useEffect 中调用 setState
   const [rememberMe, setRememberMe] = useState(() => {
@@ -108,12 +107,12 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
       if (result.data.code === 200) {
         form.setFieldValue('token', result.data.data.token)
         setCaptchaImg(result.data.data.base64)
-        setMsg(null)
+        openNotificationWithIcon('success', '提示', '验证码获取成功')
       } else {
-        setMsg(result.data.message)
+        openNotificationWithIcon('error', '提示', result.data.message)
       }
     } catch (e) {
-      setMsg((e as Error).message)
+      openNotificationWithIcon('error', '提示', (e as Error).message)
     }
   }
 
@@ -123,11 +122,6 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
       <div className="w-[498px] h-[598px] bg-[url(@/assets/img/bg_loginBox.png)] bg-no-repeat bg-size-[100%_100%] px-[35px] flex flex-col justify-center">
         <div className="text-[24px] text-[#111111] font-bold">登录平台</div>
         <Divider size="small" />
-        {msg && (
-          <div className="mb-2">
-            <Alert title={msg} type="error" closable={{ closeIcon: true, 'aria-label': 'close' }} />
-          </div>
-        )}
         <Form
           layout="vertical"
           form={form}
