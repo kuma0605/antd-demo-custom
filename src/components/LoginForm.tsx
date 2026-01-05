@@ -77,7 +77,7 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
         }
 
         // 3.跳转到首页
-        navigate({ to: '/' })
+        navigate({ to: '/', replace: true })
       } else {
         openNotificationWithIcon('error', '提示', res.data.message)
       }
