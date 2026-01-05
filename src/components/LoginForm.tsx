@@ -21,15 +21,6 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
 
   const [api, contextHolder] = notification.useNotification()
 
-  type NotificationType = 'success' | 'info' | 'warning' | 'error'
-
-  const openNotificationWithIcon = (type: NotificationType, title: string, description: string) => {
-    api[type]({
-      title,
-      description,
-    })
-  }
-
   // 使用 useMemo 计算表单初始值（只在组件挂载时计算一次）
   const initialValues = useMemo(() => {
     const isRememberMe = localStorage.getItem('rememberMe') === 'true'
@@ -77,12 +68,16 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
         }
 
         // 3.跳转到首页
-        navigate({ to: '/', replace: true })
+        navigate({ to: '/index', replace: true })
       } else {
-        openNotificationWithIcon('error', '提示', res.data.message)
+        api.error({
+          message: res.data.message,
+        })
       }
     } catch (e) {
-      openNotificationWithIcon('error', '提示', (e as Error).message)
+      api.error({
+        message: (e as Error).message,
+      })
     }
   }
 
@@ -108,10 +103,14 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
         form.setFieldValue('token', result.data.data.token)
         setCaptchaImg(result.data.data.base64)
       } else {
-        openNotificationWithIcon('error', '提示', result.data.message)
+        api.error({
+          message: result.data.message,
+        })
       }
     } catch (e) {
-      openNotificationWithIcon('error', '提示', (e as Error).message)
+      api.error({
+        message: (e as Error).message,
+      })
     }
   }
 

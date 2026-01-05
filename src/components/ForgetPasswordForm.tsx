@@ -57,15 +57,6 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
     setupAntiAutofill()
   }, [setupAntiAutofill])
 
-  type NotificationType = 'success' | 'info' | 'warning' | 'error'
-
-  const openNotificationWithIcon = (type: NotificationType, title: string, description: string) => {
-    api[type]({
-      title,
-      description,
-    })
-  }
-
   const doResetPassword = async (values: {
     mobile: string
     code: string
@@ -82,16 +73,25 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
 
       if (res.data.code === 200) {
         //修改成功
-        openNotificationWithIcon('success', '提示', '修改成功')
+        api.success({
+          title: '提示',
+          description: '修改成功',
+        })
         // 立即切换回登录面板
         setTimeout(() => {
           togglePanel('login')
         }, 500)
       } else {
-        openNotificationWithIcon('error', '提示', res.data.message)
+        api.error({
+          title: '提示',
+          description: res.data.message,
+        })
       }
     } catch (e) {
-      openNotificationWithIcon('error', '提示', (e as Error).message)
+      api.error({
+        title: '提示',
+        description: (e as Error).message,
+      })
     }
   }
 
@@ -118,7 +118,10 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
         const res = await apiClient.request(options)
         console.log(res)
         if (res.data.code === 200) {
-          openNotificationWithIcon('success', '提示', '验证码己发送，请及时查收')
+          api.success({
+            title: '提示',
+            description: '验证码己发送，请及时查收',
+          })
           form.setFieldValue('token', res.data.data.token)
 
           // 清理之前的定时器
@@ -141,13 +144,22 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
             })
           }, 1000)
         } else {
-          openNotificationWithIcon('error', '提示', res.data.message)
+          api.error({
+            title: '提示',
+            description: res.data.message,
+          })
         }
       } else {
-        openNotificationWithIcon('warning', '提示', '请输入正确手机号')
+        api.warning({
+          title: '提示',
+          description: '请输入正确手机号',
+        })
       }
     } catch (e) {
-      openNotificationWithIcon('error', '提示', (e as Error).message)
+      api.error({
+        title: '提示',
+        description: (e as Error).message,
+      })
     }
   }
 
