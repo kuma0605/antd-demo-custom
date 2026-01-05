@@ -68,11 +68,8 @@ export const ChangePassword = ({
         cancelText="取消"
         okButtonProps={{ autoFocus: true, htmlType: 'submit' }}
         onCancel={() => {
-          form.resetFields() // 取消时也重置表单
+          form.resetFields() // 取消时重置表单
           setOpen(false)
-        }}
-        afterClose={() => {
-          form.resetFields() // Modal 完全关闭后重置表单（双重保险）
         }}
         modalRender={dom => (
           <Form layout="vertical" form={form} onFinish={onFinish} autoComplete="off">
