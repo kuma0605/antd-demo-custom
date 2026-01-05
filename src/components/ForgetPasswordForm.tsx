@@ -215,7 +215,17 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
               }
             />
           </Form.Item>
-          <Form.Item label="新密码" name="newPwd" rules={[{ required: true }]}>
+          <Form.Item
+            label="新密码"
+            name="newPwd"
+            rules={[
+              {
+                required: true,
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/,
+                message: '密码必须包含大小写字母、数字和特殊字符，长度是6到16位。',
+              },
+            ]}
+          >
             <Input.Password placeholder="请输入密码" prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item name="token" hidden>

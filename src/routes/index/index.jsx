@@ -4,6 +4,8 @@ import { DownOutlined, UserOutlined, LockOutlined, LogoutOutlined } from '@ant-d
 import { Space, Dropdown } from 'antd'
 import { useUserStore } from '@/stores/useUserStore'
 import { useNavigate } from '@tanstack/react-router'
+import { ChangePassword } from '@/components/ChangePassword'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/index/')({
   component: IndexComponent,
@@ -12,12 +14,13 @@ export const Route = createFileRoute('/index/')({
 function IndexComponent() {
   const { user, isAuthenticated, logout } = useUserStore()
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
   const items = [
     {
       label: '修改密码',
       key: 'changePassword',
       onClick: () => {
-        navigate({ to: '/changePassword', replace: true })
+        setOpen(true)
       },
       icon: <LockOutlined />,
     },
@@ -47,6 +50,7 @@ function IndexComponent() {
           </Dropdown>
         </div>
       </div>
+      <ChangePassword open={open} setOpen={setOpen} />
     </div>
   )
 }
