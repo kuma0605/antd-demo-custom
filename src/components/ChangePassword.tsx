@@ -82,7 +82,7 @@ export const ChangePassword = ({
       >
         <div className="custom-form-body">
           <Form.Item name="oldPassword" label="原密码" rules={[{ required: true }]}>
-            <Input.Password placeholder="请输入原密码" prefix={<LockOutlined />} />
+            <Input.Password placeholder="请输入原密码" allowClear prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item
             name="newPassword"
@@ -95,7 +95,7 @@ export const ChangePassword = ({
               },
             ]}
           >
-            <Input.Password placeholder="请输入新密码" prefix={<LockOutlined />} />
+            <Input.Password placeholder="请输入新密码" allowClear prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item
             name="confirmPassword"
@@ -114,7 +114,7 @@ export const ChangePassword = ({
               }),
             ]}
           >
-            <Input.Password placeholder="请输入确认密码" prefix={<LockOutlined />} />
+            <Input.Password placeholder="请输入确认密码" allowClear prefix={<LockOutlined />} />
           </Form.Item>
         </div>
         <div className="mt-2 text-gray">

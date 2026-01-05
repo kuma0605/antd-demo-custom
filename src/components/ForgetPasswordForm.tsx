@@ -188,12 +188,13 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
           requiredMark={false}
         >
           <Form.Item label="手机号" name="mobile" rules={[{ required: true }]}>
-            <Input placeholder="请输入手机号" prefix={<PhoneOutlined />} />
+            <Input placeholder="请输入手机号" allowClear prefix={<PhoneOutlined />} />
           </Form.Item>
 
           <Form.Item label="验证码" name="code" rules={[{ required: true }]}>
             <Input
               placeholder="请输入验证码"
+              allowClear
               prefix={<CodeOutlined />}
               suffix={
                 <div className="relative inline-block">
@@ -226,7 +227,7 @@ export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string
               },
             ]}
           >
-            <Input.Password placeholder="请输入密码" prefix={<LockOutlined />} />
+            <Input.Password placeholder="请输入密码" allowClear prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item name="token" hidden>
             <Input type="hidden" />

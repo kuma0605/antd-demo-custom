@@ -129,14 +129,15 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
           requiredMark={false}
         >
           <Form.Item label="账号" name="username" rules={[{ required: true }]}>
-            <Input placeholder="请输入账号" prefix={<UserOutlined />} />
+            <Input placeholder="请输入账号" allowClear prefix={<UserOutlined />} />
           </Form.Item>
           <Form.Item label="密码" name="password" rules={[{ required: true }]}>
-            <Input.Password placeholder="请输入密码" prefix={<LockOutlined />} />
+            <Input.Password placeholder="请输入密码" allowClear prefix={<LockOutlined />} />
           </Form.Item>
           <Form.Item label="验证码" name="code" rules={[{ required: true }]}>
             <Input
               placeholder="请输入验证码"
+              allowClear
               prefix={<CodeOutlined />}
               suffix={
                 captchaImg ? (
