@@ -35,7 +35,7 @@ function IndexComponent() {
     },
   ]
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full h-full">
       <div className="w-full h-[57px] bg-[url(@/assets/img/bg_index_top.png)] bg-no-repeat bg-size-[100%_100%] flex justify-between items-center px-[20px]">
         <img src={logoIndex} alt="" className="w-[274px] h-[40px]" />
         <div className="flex items-center">
@@ -51,6 +51,10 @@ function IndexComponent() {
         </div>
       </div>
       <ChangePassword open={open} setOpen={setOpen} />
+      <div className="flex-1 flex overflow-y-auto">
+        <div className="w-fit">{/* 左侧菜单 */}</div>
+        <div className="flex-1 overflow-hidden flex flex-col">{/* 右侧内容 */}</div>
+      </div>
     </div>
   )
 }
