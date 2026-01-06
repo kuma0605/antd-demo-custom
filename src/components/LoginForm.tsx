@@ -71,12 +71,14 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
         navigate({ to: '/index', replace: true })
       } else {
         api.error({
-          message: res.data.message,
+          title: '提示',
+          description: res.data.message,
         })
       }
     } catch (e) {
       api.error({
-        message: (e as Error).message,
+        title: '提示',
+        description: (e as Error).message,
       })
     }
   }
@@ -104,12 +106,14 @@ export const LoginForm = ({ togglePanel }: { togglePanel: (mode: string) => void
         setCaptchaImg(result.data.data.base64)
       } else {
         api.error({
-          message: result.data.message,
+          title: '提示',
+          description: result.data.message,
         })
       }
     } catch (e) {
       api.error({
-        message: (e as Error).message,
+        title: '提示',
+        description: (e as Error).message,
       })
     }
   }
