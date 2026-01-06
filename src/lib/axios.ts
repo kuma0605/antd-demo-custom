@@ -30,7 +30,7 @@ apiClient.interceptors.request.use(
     // 可以在这里添加 token 等认证信息
     const token = localStorage.getItem('token')
     if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = token
     }
 
     // 管理全局 loading

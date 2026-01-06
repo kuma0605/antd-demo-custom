@@ -3,7 +3,7 @@ import { Divider, Form, Input, Button, type FormProps, notification } from 'antd
 import { CodeOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons'
 import apiClient from '@/lib/axios'
 import iconArrowLeft from '@/assets/icon/icon_arrow_left.png'
-import './antiAutofill.css'
+import '@/styles/antiAutofill.css'
 
 export const ForgetPasswordForm = ({ togglePanel }: { togglePanel: (mode: string) => void }) => {
   const [form] = Form.useForm()

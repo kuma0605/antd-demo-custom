@@ -6,15 +6,17 @@ import { useUserStore } from '@/stores/useUserStore'
 import { useNavigate } from '@tanstack/react-router'
 import { ChangePassword } from '@/components/ChangePassword'
 import { useState } from 'react'
+import { CustomMenu } from '@/components/CustomMenu'
 
 export const Route = createFileRoute('/index/')({
   component: IndexComponent,
 })
 
 function IndexComponent() {
-  const { user, isAuthenticated, logout } = useUserStore()
+  const { user, logout } = useUserStore()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
+
   const items = [
     {
       label: '修改密码',
@@ -34,6 +36,7 @@ function IndexComponent() {
       icon: <LogoutOutlined />,
     },
   ]
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="w-full h-[57px] bg-[url(@/assets/img/bg_index_top.png)] bg-no-repeat bg-size-[100%_100%] flex justify-between items-center px-[20px]">
@@ -51,9 +54,14 @@ function IndexComponent() {
         </div>
       </div>
       <ChangePassword open={open} setOpen={setOpen} />
-      <div className="flex-1 flex overflow-y-auto">
-        <div className="w-fit">{/* 左侧菜单 */}</div>
-        <div className="flex-1 overflow-hidden flex flex-col">{/* 右侧内容 */}</div>
+      <div className="flex-1 flex overflow-y-auto outline outline-red-500">
+        <div className="w-fit outline outline-blue-500">
+          {/* 左侧菜单 */}
+          <CustomMenu />
+        </div>
+        <div className="flex-1 overflow-hidden flex flex-col outline outline-green-500">
+          {/* 右侧内容 */}
+        </div>
       </div>
     </div>
   )
