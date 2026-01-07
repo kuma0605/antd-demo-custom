@@ -8,6 +8,9 @@ import apiClient from '@/lib/axios'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
+// 扩展 MenuItem 类型，添加 children 属性（用于递归菜单）
+type MenuItemWithChildren = MenuItem & { children?: MenuItemWithChildren[] }
+
 interface ApiMenu {
   id: string
   name?: string
@@ -32,7 +35,7 @@ interface ApiMenu {
 const convertMenuToItems = (
   menus: ApiMenu[],
   routerMap: Map<string, string | null> = new Map()
-): MenuItem[] => {
+): MenuItemWithChildren[] => {
   return menus
     .filter(menu => menu.level !== 'BUTTON' && menu.enable) // 过滤掉 BUTTON 类型的菜单
     .map(menu => {
@@ -45,21 +48,17 @@ const convertMenuToItems = (
       // 保存 router 到映射表（即使为 null 也保存，方便判断）
       routerMap.set(menu.id, menu.router)
 
-      const item: MenuItem = {
+      const item: MenuItemWithChildren = {
         key: menu.id,
         label: menu.name || menu.id,
         icon: icon,
-        // 可以根据 menu 的其他字段添加 icon、children 等
-      } as MenuItem
+      }
 
       // 递归处理子菜单（子菜单中的 BUTTON 也会被过滤）
       if (menu.children && menu.children.length > 0) {
-        ;(item as MenuItem & { children?: MenuItem[] }).children = convertMenuToItems(
-          menu.children,
-          routerMap
-        )
-        if ((item as MenuItem & { children?: MenuItem[] }).children?.length === 0) {
-          delete (item as MenuItem & { children?: MenuItem[] }).children
+        const children = convertMenuToItems(menu.children, routerMap)
+        if (children.length > 0) {
+          item.children = children
         }
       }
       return item
