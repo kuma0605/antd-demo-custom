@@ -96,8 +96,30 @@ const getUserMenu = async (): Promise<{
   return { items: [], routerMap: new Map() }
 }
 
+interface LevelKeysProps {
+  key?: string
+  children?: LevelKeysProps[]
+}
+
+const getLevelKeys = (items1: LevelKeysProps[]) => {
+  const key: Record<string, number> = {}
+  const func = (items2: LevelKeysProps[], level = 1) => {
+    items2.forEach(item => {
+      if (item.key) {
+        key[item.key] = level
+      }
+      if (item.children) {
+        func(item.children, level + 1)
+      }
+    })
+  }
+  func(items1)
+  return key
+}
+
 export const CustomMenu = () => {
   const [collapsed, setCollapsed] = useState(false)
+  const [stateOpenKeys, setStateOpenKeys] = useState<string[]>([])
   const navigate = useNavigate()
 
   // 在组件内部获取菜单数据（已经是 Ant Design Menu 格式）
@@ -113,6 +135,8 @@ export const CustomMenu = () => {
   // 从 menuData 中提取 items 和 routerMap
   const menuItems = menuData?.items || []
   const routerMap = menuData?.routerMap || new Map<string, string | null>()
+
+  const levelKeys = getLevelKeys(menuItems as LevelKeysProps[])
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed)
@@ -135,6 +159,27 @@ export const CustomMenu = () => {
     }
   }
 
+  const onOpenChange: MenuProps['onOpenChange'] = openKeys => {
+    const currentOpenKey = openKeys.find(key => !stateOpenKeys.includes(key))
+    // open
+    if (currentOpenKey !== undefined) {
+      const repeatIndex = openKeys
+        .filter(key => key !== currentOpenKey)
+        .findIndex(key => levelKeys[key] === levelKeys[currentOpenKey])
+
+      setStateOpenKeys(
+        openKeys
+          // remove repeat key
+          .filter((_, index) => index !== repeatIndex)
+          // remove current level all child
+          .filter(key => levelKeys[key] <= levelKeys[currentOpenKey])
+      )
+    } else {
+      // close
+      setStateOpenKeys(openKeys)
+    }
+  }
+
   return (
     <div className="flex flex-col w-fit h-full bg-[url(@/assets/img/bg_left_menu.png)] bg-no-repeat bg-size-[100%_100%] ">
       <div className="flex-1 overflow-y-auto ">
@@ -142,9 +187,11 @@ export const CustomMenu = () => {
           className="bg-transparent! border-r-0!"
           mode="inline"
           theme="light"
-          inlineCollapsed={collapsed}
           items={menuItems}
+          openKeys={stateOpenKeys}
           onClick={handleClick}
+          onOpenChange={onOpenChange}
+          inlineCollapsed={collapsed}
         />
       </div>
       <Button
