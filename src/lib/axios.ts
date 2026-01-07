@@ -57,6 +57,12 @@ apiClient.interceptors.request.use(
 // 响应拦截器
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
+    /* // 开发环境模拟延迟（可选，用于测试 loading 效果）
+    if (import.meta.env.DEV) {
+      const delay = 5000 // 延迟 2 秒，可以根据需要调整
+      await new Promise(resolve => setTimeout(resolve, delay))
+    } */
+
     // 统一处理响应数据
     // 减少 loading 计数
     const config = response.config

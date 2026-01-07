@@ -39,7 +39,7 @@ function IndexComponent() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="w-full h-[57px] bg-[url(@/assets/img/bg_index_top.png)] bg-no-repeat bg-size-[100%_100%] flex justify-between items-center px-[20px]">
+      <div className="w-full h-[57px] bg-[url(@/assets/img/bg_index_top.png)] bg-no-repeat bg-size-[100%_100%] flex justify-between items-center px-[20px] shrink-0">
         <img src={logoIndex} alt="" className="w-[274px] h-[40px]" />
         <div className="flex items-center">
           <Dropdown menu={{ items }}>
@@ -54,14 +54,10 @@ function IndexComponent() {
         </div>
       </div>
       <ChangePassword open={open} setOpen={setOpen} />
-      <div className="flex-1 flex overflow-y-auto outline outline-red-500">
-        <div className="w-fit outline outline-blue-500">
-          {/* 左侧菜单 */}
-          <CustomMenu />
-        </div>
-        <div className="flex-1 overflow-hidden flex flex-col outline outline-green-500">
-          {/* 右侧内容 */}
-        </div>
+      <div className="flex-1 flex min-h-0">
+        {/* 左侧菜单 */}
+        <CustomMenu />
+        <div className="flex-1 overflow-hidden flex flex-col">{/* 右侧内容 */}</div>
       </div>
     </div>
   )

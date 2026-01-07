@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { apiClient } from '@/lib/axios'
 import { LockOutlined } from '@ant-design/icons'
 import { Form, Input, notification, Modal } from 'antd'
+import { useNavigate } from '@tanstack/react-router'
+import { useUserStore } from '@/stores/useUserStore'
 
 export const ChangePassword = ({
   open,
@@ -12,6 +14,9 @@ export const ChangePassword = ({
 }) => {
   const [form] = Form.useForm()
   const [api, contextHolder] = notification.useNotification()
+
+  const { logout } = useUserStore()
+  const navigate = useNavigate()
 
   // 当 Modal 打开时，重置表单
   useEffect(() => {
@@ -44,6 +49,10 @@ export const ChangePassword = ({
         })
         form.resetFields() // 成功提交后重置表单
         setOpen(false)
+        setTimeout(() => {
+          logout()
+          navigate({ to: '/login', replace: true })
+        }, 1000)
       } else {
         api.error({
           title: '提示',

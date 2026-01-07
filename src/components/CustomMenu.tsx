@@ -37,7 +37,9 @@ const convertMenuToItems = (
     .filter(menu => menu.level !== 'BUTTON' && menu.enable) // 过滤掉 BUTTON 类型的菜单
     .map(menu => {
       const icon = menu.icon ? (
-        <img className="w-[24px] h-[24px]" src={menu.icon} alt={menu.name} />
+        <div className="w-[24px] h-[24px]">
+          <img className="w-full h-full " src={menu.icon} alt={menu.name} />
+        </div>
       ) : undefined
 
       // 保存 router 到映射表（即使为 null 也保存，方便判断）
@@ -134,17 +136,21 @@ export const CustomMenu = () => {
   }
 
   return (
-    <div>
-      <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
-      <Menu
-        defaultSelectedKeys={menuItems.length > 0 ? [menuItems[0]?.key as string] : []}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={collapsed}
-        items={menuItems}
-        onClick={handleClick}
+    <div className="flex flex-col w-fit h-full bg-[url(@/assets/img/bg_left_menu.png)] bg-no-repeat bg-size-[100%_100%] ">
+      <div className="flex-1 overflow-y-auto ">
+        <Menu
+          className="bg-transparent! border-r-0!"
+          mode="inline"
+          theme="light"
+          inlineCollapsed={collapsed}
+          items={menuItems}
+          onClick={handleClick}
+        />
+      </div>
+      <Button
+        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        onClick={toggleCollapsed}
+        className="m-4"
       />
     </div>
   )
