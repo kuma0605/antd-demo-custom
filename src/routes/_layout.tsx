@@ -1,14 +1,28 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import logoIndex from '@/assets/img/logo_index.png'
 import { DownOutlined, UserOutlined, LockOutlined, LogoutOutlined } from '@ant-design/icons'
-import { Space, Dropdown } from 'antd'
+import { Space, Dropdown, Tabs } from 'antd'
 import { useUserStore } from '@/stores/useUserStore'
 import { useNavigate } from '@tanstack/react-router'
 import { ChangePassword } from '@/components/ChangePassword'
 import { useState } from 'react'
 import { CustomMenu } from '@/components/CustomMenu'
+import { Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/index/')({
+export const Route = createFileRoute('/_layout')({
+  beforeLoad: () => {
+    // 获取登录状态
+    const { isAuthenticated, token } = useUserStore.getState()
+
+    // 判断是否登录（同时检查 isAuthenticated 和 token）
+    if (!isAuthenticated || !token) {
+      // 未登录，跳转到登录页
+      throw redirect({
+        to: '/login',
+        replace: true,
+      })
+    }
+  },
   component: IndexComponent,
 })
 
@@ -57,7 +71,23 @@ function IndexComponent() {
       <div className="flex-1 flex min-h-0">
         {/* 左侧菜单 */}
         <CustomMenu />
-        <div className="flex-1 overflow-hidden flex flex-col">{/* 右侧内容 */}</div>
+        <div className="flex-1 overflow-hidden flex flex-col">
+          {/* 右侧内容 */}
+          <Tabs
+            defaultActiveKey="1"
+            className="flex-shrink-0"
+            items={Array.from({ length: 30 }, (_, i) => {
+              const id = String(i)
+              return {
+                label: `Tab-${id}`,
+                key: id,
+              }
+            })}
+          />
+          <div className="flex-1 overflow-y-auto">
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   )

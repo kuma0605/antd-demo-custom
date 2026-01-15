@@ -13,8 +13,9 @@ import { Route as UsersRouteImport } from './routes/users'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as IndexIndexRouteImport } from './routes/index/index'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutSystemSettingRegisteredUserManagementRouteImport } from './routes/_layout/systemSetting/registeredUserManagement'
 
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
@@ -36,57 +37,82 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
-const IndexIndexRoute = IndexIndexRouteImport.update({
-  id: '/index/',
-  path: '/index/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const LayoutSystemSettingRegisteredUserManagementRoute =
+  LayoutSystemSettingRegisteredUserManagementRouteImport.update({
+    id: '/systemSetting/registeredUserManagement',
+    path: '/systemSetting/registeredUserManagement',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/users': typeof UsersRoute
-  '/index': typeof IndexIndexRoute
+  '/': typeof LayoutIndexRoute
+  '/systemSetting/registeredUserManagement': typeof LayoutSystemSettingRegisteredUserManagementRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/users': typeof UsersRoute
-  '/index': typeof IndexIndexRoute
+  '/': typeof LayoutIndexRoute
+  '/systemSetting/registeredUserManagement': typeof LayoutSystemSettingRegisteredUserManagementRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteWithChildren
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/users': typeof UsersRoute
-  '/index/': typeof IndexIndexRoute
+  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/systemSetting/registeredUserManagement': typeof LayoutSystemSettingRegisteredUserManagementRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/login' | '/profile' | '/users' | '/index'
+  fullPaths:
+    | '/about'
+    | '/login'
+    | '/profile'
+    | '/users'
+    | '/'
+    | '/systemSetting/registeredUserManagement'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/profile' | '/users' | '/index'
-  id: '__root__' | '/' | '/about' | '/login' | '/profile' | '/users' | '/index/'
+  to:
+    | '/about'
+    | '/login'
+    | '/profile'
+    | '/users'
+    | '/'
+    | '/systemSetting/registeredUserManagement'
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/about'
+    | '/login'
+    | '/profile'
+    | '/users'
+    | '/_layout/'
+    | '/_layout/systemSetting/registeredUserManagement'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   UsersRoute: typeof UsersRoute
-  IndexIndexRoute: typeof IndexIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -119,30 +145,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/index/': {
-      id: '/index/'
-      path: '/index'
-      fullPath: '/index'
-      preLoaderRoute: typeof IndexIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_layout/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/systemSetting/registeredUserManagement': {
+      id: '/_layout/systemSetting/registeredUserManagement'
+      path: '/systemSetting/registeredUserManagement'
+      fullPath: '/systemSetting/registeredUserManagement'
+      preLoaderRoute: typeof LayoutSystemSettingRegisteredUserManagementRouteImport
+      parentRoute: typeof LayoutRoute
     }
   }
 }
 
+interface LayoutRouteChildren {
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutSystemSettingRegisteredUserManagementRoute: typeof LayoutSystemSettingRegisteredUserManagementRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutSystemSettingRegisteredUserManagementRoute:
+    LayoutSystemSettingRegisteredUserManagementRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  LayoutRoute: LayoutRouteWithChildren,
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   UsersRoute: UsersRoute,
-  IndexIndexRoute: IndexIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

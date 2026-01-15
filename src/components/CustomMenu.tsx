@@ -153,8 +153,12 @@ export const CustomMenu = () => {
   const handleClick: MenuProps['onClick'] = e => {
     // 直接从 Map 中获取 router，O(1) 时间复杂度
     const router = routerMap.get(e.key as string)
-    if (router) {
-      navigate({ to: router })
+    // 使用正则表达式替换开头的 /index
+    // /^\/index/ 表示匹配字符串开头的 /index
+    const formattedRouter = router?.replace(/^\/index/, '')
+    console.log(formattedRouter)
+    if (formattedRouter) {
+      navigate({ to: formattedRouter })
     }
   }
 
